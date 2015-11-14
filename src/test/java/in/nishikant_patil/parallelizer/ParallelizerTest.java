@@ -1,5 +1,6 @@
 package in.nishikant_patil.parallelizer;
 
+import in.nishikant_patil.parallelizer.contracts.Operation;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -7,9 +8,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-/**
- * Created by Nishikant on 11/14/2015.
- */
 public class ParallelizerTest {
     Parallelizer<Integer, Integer> parallelizer = new Parallelizer<>();
 
