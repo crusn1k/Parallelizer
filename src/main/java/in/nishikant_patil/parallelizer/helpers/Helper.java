@@ -1,7 +1,9 @@
 package in.nishikant_patil.parallelizer.helpers;
 
-import in.nishikant_patil.parallelizer.contracts.Operation;
+import in.nishikant_patil.parallelizer.contracts.Mapper;
+import in.nishikant_patil.parallelizer.contracts.Reducer;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
@@ -14,28 +16,23 @@ public abstract class Helper {
     protected static final int DEGREE_OF_PARALLELISM=4;
     protected ExecutorService executorService = Executors.newFixedThreadPool(DEGREE_OF_PARALLELISM);
 
-    public <T, U> List<U> process(List<T> dataSet, Operation<T, U> operationToPerform) throws ExecutionException, InterruptedException {
-        List<Callable<List<U>>> callables = getCallables(dataSet, operationToPerform);
+    public <T, U, V> V process(List<T> dataSet, Mapper<T, U> mapper, Reducer<U, V> reducer) throws ExecutionException, InterruptedException {
+        List<Callable<List<U>>> callables = getCallables(dataSet, mapper);
         List<Future<List<U>>> futures = executorService.invokeAll(callables);
-        List<U> results = combineResults(futures);
+        V results = reducer.reduce(getProcessedData(futures));
         shutdown();
         return results;
     }
 
-    protected abstract <U, T> List<Callable<List<U>>> getCallables(List<T> dataSet, Operation<T, U> operationToPerform);
-
-
-    protected <U> List<U> combineResults(List<Future<List<U>>> futures) throws InterruptedException, ExecutionException {
-        List<U> ret = null;
+    private <U> List<List<U>> getProcessedData(List<Future<List<U>>> futures) throws ExecutionException, InterruptedException {
+        List<List<U>> data = new ArrayList<>();
         for(Future<List<U>> future : futures){
-            if(null==ret){
-                ret = future.get();
-            } else {
-                ret.addAll(future.get());
-            }
+            data.add(future.get());
         }
-        return ret;
+        return data;
     }
+
+    protected abstract <U, T> List<Callable<List<U>>> getCallables(List<T> dataSet, Mapper<T, U> mapper);
 
     protected void shutdown(){
         executorService.shutdown();

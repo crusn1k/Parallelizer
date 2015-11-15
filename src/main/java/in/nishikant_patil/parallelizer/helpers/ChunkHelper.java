@@ -1,6 +1,6 @@
 package in.nishikant_patil.parallelizer.helpers;
 
-import in.nishikant_patil.parallelizer.contracts.Operation;
+import in.nishikant_patil.parallelizer.contracts.Mapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.concurrent.Callable;
  */
 public final class ChunkHelper extends Helper {
     @Override
-    protected <U, T> List<Callable<List<U>>> getCallables(final List<T> dataSet, final Operation<T, U> operationToPerform) {
+    protected <U, T> List<Callable<List<U>>> getCallables(final List<T> dataSet, final Mapper<T, U> mapper) {
         List<Callable<List<U>>> callables = new ArrayList<>();
         for(int i=0; i!=DEGREE_OF_PARALLELISM; ++i){
             final int chunkSize = (int) Math.ceil((dataSet.size()*1.0)/DEGREE_OF_PARALLELISM);
@@ -21,7 +21,7 @@ public final class ChunkHelper extends Helper {
             callables.add(new Callable<List<U>>() {
                 @Override
                 public List<U> call() throws Exception {
-                    return operationToPerform.process(dataSet.subList(startIndex, Math.min(dataSet.size(), startIndex+chunkSize)));
+                    return mapper.map(dataSet.subList(startIndex, Math.min(dataSet.size(), startIndex + chunkSize)));
                 }
             });
         }

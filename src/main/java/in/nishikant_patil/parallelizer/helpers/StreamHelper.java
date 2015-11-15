@@ -1,6 +1,6 @@
 package in.nishikant_patil.parallelizer.helpers;
 
-import in.nishikant_patil.parallelizer.contracts.Operation;
+import in.nishikant_patil.parallelizer.contracts.Mapper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public final class StreamHelper extends Helper {
     @Override
-    protected <U, T> List<Callable<List<U>>> getCallables(final List<T> dataSet, final Operation<T, U> operationToPerform) {
+    protected <U, T> List<Callable<List<U>>> getCallables(final List<T> dataSet, final Mapper<T, U> mapper) {
         List<Callable<List<U>>> callables = new ArrayList<>();
         final AtomicInteger index = new AtomicInteger(0);
         for (int i = 0; i != DEGREE_OF_PARALLELISM; ++i) {
@@ -24,7 +24,7 @@ public final class StreamHelper extends Helper {
                     while (index.get() < dataSet.size()) {
                         int localIndex = index.getAndIncrement();
                         if (localIndex < dataSet.size()) {
-                            ret.addAll(operationToPerform.process(Arrays.asList(dataSet.get(localIndex))));
+                            ret.addAll(mapper.map(Arrays.asList(dataSet.get(localIndex))));
                         }
                     }
                     return ret;
