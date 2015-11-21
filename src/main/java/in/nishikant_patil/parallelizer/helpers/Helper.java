@@ -17,11 +17,11 @@ public abstract class Helper {
     protected ExecutorService executorService = Executors.newFixedThreadPool(DEGREE_OF_PARALLELISM);
 
     public <T, U, V> V process(List<T> dataSet, Mapper<T, U> mapper, Reducer<U, V> reducer) throws ExecutionException, InterruptedException {
-        List<Callable<List<U>>> callables = getCallables(dataSet, mapper);
-        List<Future<List<U>>> futures = executorService.invokeAll(callables);
-        V results = reducer.reduce(getProcessedData(futures));
-        shutdown();
-        return results;
+        try {
+            return reducer.reduce(getProcessedData(executorService.invokeAll(getCallables(dataSet, mapper))));
+        }finally {
+            shutdown();
+        }
     }
 
     private <U> List<List<U>> getProcessedData(List<Future<List<U>>> futures) throws ExecutionException, InterruptedException {
