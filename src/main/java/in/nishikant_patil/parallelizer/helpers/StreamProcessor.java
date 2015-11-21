@@ -9,9 +9,9 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Helper to processes the data set as a stream and perform the operation over multiple threads.
+ * Processor to processes the data set as a stream and perform the operation over multiple threads.
  */
-public final class StreamHelper extends Helper {
+public final class StreamProcessor extends Processor {
     @Override
     protected <U, T> List<Callable<List<U>>> getCallables(final List<T> dataSet, final Mapper<T, U> mapper) {
         List<Callable<List<U>>> callables = new ArrayList<>();

@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 /**
- * Helper to processes the data set in chunks. The data list will be split into equal chunks and the operation will be
+ * Processor to processes the data set in chunks. The data list will be split into equal chunks and the operation will be
  * performed by multiple threads on these chunks. The operation should not have dependency between the data in different
  * chunks.
  */
-public final class ChunkHelper extends Helper {
+public final class ChunkProcessor extends Processor {
     @Override
     protected <U, T> List<Callable<List<U>>> getCallables(final List<T> dataSet, final Mapper<T, U> mapper) {
         List<Callable<List<U>>> callables = new ArrayList<>();
