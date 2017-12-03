@@ -15,12 +15,12 @@ public final class ChunkProcessor extends Processor {
     @Override
     protected <U, T> List<Callable<List<U>>> getCallables(final List<T> dataSet, final Mapper<T, U> mapper) {
         List<Callable<List<U>>> callables = new ArrayList<>();
-        for(int i=0; i!=DEGREE_OF_PARALLELISM; ++i){
-            final int chunkSize = (int) Math.ceil((dataSet.size()*1.0)/DEGREE_OF_PARALLELISM);
-            final int startIndex = i*chunkSize;
+        for (int i = 0; i != DEGREE_OF_PARALLELISM; ++i) {
+            final int chunkSize = (int) Math.ceil((dataSet.size() * 1.0) / DEGREE_OF_PARALLELISM);
+            final int startIndex = i * chunkSize;
             callables.add(new Callable<List<U>>() {
                 @Override
-                public List<U> call() throws Exception {
+                public List<U> call() {
                     return mapper.map(dataSet.subList(startIndex, Math.min(dataSet.size(), startIndex + chunkSize)));
                 }
             });
