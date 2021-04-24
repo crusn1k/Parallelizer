@@ -13,7 +13,7 @@ import java.util.concurrent.*;
  */
 public abstract class Processor {
 
-    protected static final int DEGREE_OF_PARALLELISM = 4;
+    protected static final int DEGREE_OF_PARALLELISM = 9;
     protected ExecutorService executorService = Executors.newFixedThreadPool(DEGREE_OF_PARALLELISM);
 
     public <T, U, V> V process(List<T> dataSet, Mapper<T, U> mapper, Reducer<U, V> reducer) throws ExecutionException, InterruptedException {
