@@ -1,9 +1,10 @@
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class DummyTest{
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+public class DummyTest {
     @Test
-    public void dummyTest(){
-        Assert.assertTrue(true);
+    public void dummyTest() {
+        assertTrue(true);
     }
 }

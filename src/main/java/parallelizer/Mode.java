@@ -1,4 +1,4 @@
-package in.nishikant_patil.parallelizer;
+package parallelizer;
 
 /**
  * Specifies the mode of parallel processing. CHUNK will create multiple sub lists of the data set while STREAM will

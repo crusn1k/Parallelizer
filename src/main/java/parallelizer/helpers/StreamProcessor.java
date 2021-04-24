@@ -1,9 +1,9 @@
-package in.nishikant_patil.parallelizer.helpers;
+package parallelizer.helpers;
 
-import in.nishikant_patil.parallelizer.contracts.Mapper;
+import parallelizer.contracts.Mapper;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -17,18 +17,15 @@ public final class StreamProcessor extends Processor {
         List<Callable<List<U>>> callables = new ArrayList<>();
         final AtomicInteger index = new AtomicInteger(0);
         for (int i = 0; i != DEGREE_OF_PARALLELISM; ++i) {
-            callables.add(new Callable<List<U>>() {
-                @Override
-                public List<U> call() throws Exception {
-                    List<U> ret = new ArrayList<>();
-                    while (index.get() < dataSet.size()) {
-                        int localIndex = index.getAndIncrement();
-                        if (localIndex < dataSet.size()) {
-                            ret.addAll(mapper.map(Arrays.asList(dataSet.get(localIndex))));
-                        }
+            callables.add(() -> {
+                List<U> ret = new ArrayList<>();
+                while (index.get() < dataSet.size()) {
+                    int localIndex = index.getAndIncrement();
+                    if (localIndex < dataSet.size()) {
+                        ret.addAll(mapper.map(Collections.singletonList(dataSet.get(localIndex))));
                     }
-                    return ret;
                 }
+                return ret;
             });
         }
         return callables;

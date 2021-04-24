@@ -1,15 +1,11 @@
-package in.nishikant_patil.parallelizer.helpers;
+package parallelizer.helpers;
 
-import in.nishikant_patil.parallelizer.contracts.Mapper;
-import in.nishikant_patil.parallelizer.contracts.Reducer;
+import parallelizer.contracts.Mapper;
+import parallelizer.contracts.Reducer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
 
 /**
  * Abstract processor class to hold the generic functionality of performing a given operation on a data set over multiple

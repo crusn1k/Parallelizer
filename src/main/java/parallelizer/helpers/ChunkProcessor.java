@@ -1,6 +1,6 @@
-package in.nishikant_patil.parallelizer.helpers;
+package parallelizer.helpers;
 
-import in.nishikant_patil.parallelizer.contracts.Mapper;
+import parallelizer.contracts.Mapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,12 +18,7 @@ public final class ChunkProcessor extends Processor {
         for (int i = 0; i != DEGREE_OF_PARALLELISM; ++i) {
             final int chunkSize = (int) Math.ceil((dataSet.size() * 1.0) / DEGREE_OF_PARALLELISM);
             final int startIndex = i * chunkSize;
-            callables.add(new Callable<List<U>>() {
-                @Override
-                public List<U> call() {
-                    return mapper.map(dataSet.subList(startIndex, Math.min(dataSet.size(), startIndex + chunkSize)));
-                }
-            });
+            callables.add(() -> mapper.map(dataSet.subList(startIndex, Math.min(dataSet.size(), startIndex + chunkSize))));
         }
         return callables;
     }

@@ -1,4 +1,4 @@
-package in.nishikant_patil.parallelizer.contracts;
+package parallelizer.contracts;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
